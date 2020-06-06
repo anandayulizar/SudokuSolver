@@ -8,6 +8,10 @@ def loadSudokuText(filename):
 
     return sudokuMatrix
 
+def loadSudokuImage(filename):
+    pass
+
+
 
 
 

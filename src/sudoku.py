@@ -1,5 +1,6 @@
-import loader
+import fileHandler
 import os
+import time
 
 class Sudoku(object):
     def __init__(self, sudokuMatrix):
@@ -24,7 +25,11 @@ class Sudoku(object):
                         if num in candidates and num != '#':
                             candidates.remove(num)
 
-                    self.candidateMap[(i, j)] = candidates
+                    if len(candidates) == 1:
+                        # Naked single strategy
+                        self.sudokuMatrix[i][j] = candidates[0]
+                    else:
+                        self.candidateMap[(i, j)] = candidates
 
 
     # Print Function
@@ -57,56 +62,77 @@ class Sudoku(object):
 
     def getSubGrid(self, x, y):
         subgrid = []
-        colSubgrid = x // 3
-        rowSubgrid = y // 3
+        colSubgrid = y // 3
+        rowSubgrid = x // 3
         for rowIdx in range(3 * rowSubgrid, 3 * rowSubgrid + 3):
             for colIdx in range(3 * colSubgrid, 3 * colSubgrid + 3):
                 subgrid.append(self.sudokuMatrix[rowIdx][colIdx])
 
         return subgrid
+
+    def getCoordinatesOf(self, num):
+        coordinatesList = []
+        for i, row in enumerate(self.sudokuMatrix):
+            for j, square in enumerate(row):
+                if square == num:
+                    coordinatesList.append((i, j))
+        coordinatesList.sort()
+
+        return coordinatesList
         
 
     def checkCoordinateAvailability(self, num, x, y):
         # Check availability in Row
         if num in self.getRow(x):
-            print('Already exists in row')
             return False
         
         # Check availability in Column
         if num in self.getColumn(y):
-            print('Already exists in col')
             return False
 
         # Check availability in subgrid
         if num in self.getSubGrid(x, y):
-            print('Already exists in subgrid')
             return False
         
-        print('Doesn\'t exist yet')
         return True
 
-    def preProcessing(self):
-        pass
+    def solve(self):
+        # Inspired by Ajinkya Sonawane
+        # https://medium.com/daily-python/solving-sudoku-puzzle-using-backtracking-in-python-daily-python-29-99a825042e
+        for coordinate in self.candidateMap:
+            if self.sudokuMatrix[coordinate[0]][coordinate[1]] == '#':
+                for digit in self.candidateMap[coordinate]:
+                    if self.checkCoordinateAvailability(digit, coordinate[0], coordinate[1]):
+                        self.sudokuMatrix[coordinate[0]][coordinate[1]] = digit
+                        check = self.solve()
+                        if (check):
+                            return True
+                        self.sudokuMatrix[coordinate[0]][coordinate[1]] = '#' # Backtrack
+                # Kalo for-nya abis, berarti salah di sebelum-sebelumnya
+                return
 
-    # def nakedSingle(self):
-    #     for key, value in self.sudokuMatrix:
-    #         if len(value) == 1:
-    #             self.sudokuMatrix[key[0]][key[1]] = value[0]
-    #             del self.candidateMap[key]
+        return True                 
 
-    
-
-
-        
 if __name__ == "__main__":
     sudokuPath = os.path.join(os.getcwd(), os.pardir, 'test')
-    sudoku = Sudoku(loader.loadSudokuText(os.path.join(sudokuPath, 'tc1.txt')))
+    sudoku = Sudoku(fileHandler.loadSudokuText(os.path.join(sudokuPath, 'tc2.txt')))
     sudoku.printAsGrid()
-
-    print(sudoku.checkCoordinateAvailability('5', 4, 4))
     # sudoku.printCandidatesMap()
+
+    start = time.perf_counter_ns()
+    sudoku.solve()
+    end = time.perf_counter_ns()
+    print(f'Time: {(end - start) / 1000000000} s')
+
+    sudoku.printAsGrid()
+    coordinatesList = sudoku.getCoordinatesOf('5')
+
+    
+    
+
+    # print(sudoku.checkCoordinateAvailability('5', 4, 4))
     # print(sudoku.getColumn(5))
     # print(sudoku.getRow(4))
-    # print(sudoku.getSubGrid(4,5))
+    # print(sudoku.getSubGrid(2, 4))
 
     
