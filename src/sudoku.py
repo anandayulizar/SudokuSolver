@@ -127,7 +127,9 @@ if __name__ == "__main__":
     sudoku.printAsGrid()
     coordinatesList = sudoku.getCoordinatesOf('5')
 
-    
+    resultPath = os.path.join(os.getcwd(), os.pardir, 'result')
+    fileHandler.writeCoordinatesToFile(coordinatesList, os.path.join(resultPath, 'tc2coordinates5.txt'))
+    fileHandler.writeSudokuToFile(sudoku.sudokuMatrix, os.path.join(resultPath, 'tc2Solved.txt'))
     
 
     # print(sudoku.checkCoordinateAvailability('5', 4, 4))
