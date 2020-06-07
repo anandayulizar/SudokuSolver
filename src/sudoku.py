@@ -25,11 +25,9 @@ class Sudoku(object):
                         if num in candidates and num != '#':
                             candidates.remove(num)
 
-                    if len(candidates) == 1:
-                        # Naked single strategy
-                        self.sudokuMatrix[i][j] = candidates[0]
-                    else:
-                        self.candidateMap[(i, j)] = candidates
+                    
+                    self.candidateMap[(i, j)] = candidates
+
 
 
     # Print Function
@@ -96,7 +94,14 @@ class Sudoku(object):
         
         return True
 
-    def solve(self):
+    
+    def preProcessing(self):
+        # Naked single strategy
+        for key, value in self.candidateMap.items():
+            if len(value) == 1:
+                self.sudokuMatrix[key[0]][key[1]] = value[0]
+
+    def processing(self):
         # Inspired by Ajinkya Sonawane
         # https://medium.com/daily-python/solving-sudoku-puzzle-using-backtracking-in-python-daily-python-29-99a825042e
         for coordinate in self.candidateMap:
@@ -111,13 +116,19 @@ class Sudoku(object):
                 # Kalo for-nya abis, berarti salah di sebelum-sebelumnya
                 return
 
-        return True                 
+        return True     
+
+    def solve(self):
+        self.preProcessing()
+        result = self.processing()
+
+        return result     
 
 if __name__ == "__main__":
     sudokuPath = os.path.join(os.getcwd(), os.pardir, 'test')
     sudoku = Sudoku(fileHandler.loadSudokuText(os.path.join(sudokuPath, 'tc2.txt')))
     sudoku.printAsGrid()
-    # sudoku.printCandidatesMap()
+    sudoku.printCandidatesMap()
 
     start = time.perf_counter_ns()
     sudoku.solve()
