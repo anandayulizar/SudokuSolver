@@ -49,6 +49,13 @@ Dalam mencari solusi, program ini menggunakan algoritma backtracking dengan mema
 
 Untuk mempercepat keberjalanan algoritma, dilakukan optimisasi dengan mencatat candidate-candidate yang dapat ditempatkan (tidak terdapat nomor yang sama dalam row, column, atau subgrid yang sama) untuk setiap kotak yang masih kosong. Dengan begini, dalam pelaksanaan backtracking penempatan angka tidak akan mencoba dalam seluruh rentang 1-9 tetapi hanya yang masih memungkinkan saja sehingga mempersingkat pelaksanaan algoritma. Selain itu, diterapkan strategi naked single, yaitu sebuah kotak yang hanya memiliki 1 candidate akan di-assign dengan candidate tersebut terlebih dahulu, sebelum memulai algoritma backtracking sehingga simpul yang dibangkitkan dalam backtracking berkurang.
 
+Saya menggunakan algoritma backtracking dikarenakan implementasinya yang cukup mudah dalam program dan kompleksitas yang lebih baik dibandingkan dengan brute force. Karena backtracking juga merupakan algorirma yang cukup mendasar, algoritma ini jadi dapat dikembangkan dengan heuristik-heuristik yang unik.
+
+Kompleksitas Waktu: O(c(n^2))
+<br>
+dengan c adalah jumlah candidate terbanyak yang terdapat pada suatu titik
+
+
 ## Alasan Pemilihan Library
 #### pyteserract
 Pytesseract merupakan library OCR (Optical Character Recognition) yang paling populer di python sehingga merupakan pilihan utama saya dalam mengambil puzzle dari file gambar. Kelebihan yang saya rasakan antara lain merupakan penggunaannya yang mudah dan dokumentasinya yang banyak dibahas di internet (stackoverflow dsb) sehingga mempermudah saya dalam menggunakannya untuk pertama kali. Kekurangannya ada di sisi download yang membutuhkan langkah lebih banyak dari library biasanya. Saya belum menemukan kekurangan lain dalam penggunaan pytesseract sejauh ini.
@@ -59,10 +66,10 @@ PIL (Python Imaging Library) atau Pillow dalam versi baru, merupakan library yan
 Alternatif lain adalah OpenCV. Pada awalnya saya mencoba menggunakan OpenCV dan berencana untuk mengambil data puzzle dari gambar dengan cara detect kotak-kotak yang terdapat pada puzzle. Namun, karena saat melakukan treshold pada gambar susah didapatkan hasil yang baik untuk diproses, sehingga saya beralih ke strategi crop setiap kotak. Karena strategi ini bisa dilakukan oleh PIL, maka saya beralih menggunakan PIL.
 
 ## Referensi
-Berikut merupakan referensi yang membantu saya dalam mengerjakan Program ini
-[1] https://medium.com/daily-python/solving-sudoku-puzzle-using-backtracking-in-python-daily-python-29-99a825042e
-[2] https://www.youtube.com/watch?v=b123EURtu3I
-[3] Jawaban Blckknght dalam https://stackoverflow.com/questions/37952851/formating-sudoku-grids-python-3
+Berikut merupakan referensi yang membantu saya dalam mengerjakan Program ini <br>
+[1] https://medium.com/daily-python/solving-sudoku-puzzle-using-backtracking-in-python-daily-python-29-99a825042e <br>
+[2] https://www.youtube.com/watch?v=b123EURtu3I <br>
+[3] Jawaban Blckknght dalam https://stackoverflow.com/questions/37952851/formating-sudoku-grids-python-3 <br>
 [4] https://stackabuse.com/pytesseract-simple-python-optical-character-recognition/
     
-Info lebih jelas mengenai spesifikasi tugas dapat dilihan pada Repository yang saya fork
+Info lebih jelas mengenai spesifikasi tugas dapat dilihat pada Repository yang menjadi acuan fork
